@@ -6,14 +6,8 @@ class JobRepository extends CrudRepository {
     super(Job);
   }
   async getAll(filter) {
-    console.log(filter);
-    try {
-      const jobs = await Job.find(filter);
-      return jobs;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    const jobs = await Job.find(filter);
+    return jobs;
   }
 }
 

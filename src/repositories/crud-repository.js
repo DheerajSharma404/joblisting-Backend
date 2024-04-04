@@ -4,55 +4,30 @@ class CrudRepository {
   }
 
   async create(data) {
-    try {
-      const response = await this.model.create(data);
-      return response;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    const response = await this.model.create(data);
+    return response;
   }
 
   async get(id) {
-    try {
-      const response = await this.model.findById(id);
-      return response;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    const response = await this.model.findById(id);
+    return response;
   }
 
   async getAll() {
-    try {
-      const response = await this.model.find({});
-      return response;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    const response = await this.model.find({});
+    return response;
   }
 
   async destroy(id) {
-    try {
-      const response = await this.model.findByIdAndDelete(id);
-      return response;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    const response = await this.model.findByIdAndDelete(id);
+    return response;
   }
 
   async update(id, data) {
-    try {
-      const response = await this.model.findByIdAndUpdate(id, data, {
-        new: true,
-      }); // {new:true} return the updated document
-      return response;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    const response = await this.model.findByIdAndUpdate(id, data, {
+      new: true,
+    }); // {new:true} return the updated document
+    return response;
   }
 }
 

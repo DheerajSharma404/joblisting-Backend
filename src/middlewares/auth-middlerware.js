@@ -46,6 +46,7 @@ const checkAuth = async (req, res, next) => {
       next();
     }
   } catch (error) {
+    
     return res.status(error.statusCode).json(error);
   }
 };

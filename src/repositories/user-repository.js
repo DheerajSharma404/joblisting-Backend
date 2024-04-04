@@ -7,12 +7,8 @@ class UserRepository extends CrudRepository {
   }
 
   async getUserByEmail(data) {
-    try {
-      const response = await User.findOne({ email: data });
-      return response;
-    } catch (error) {
-      throw error;
-    }
+    const response = await User.findOne({ email: data });
+    return response;
   }
 }
 
