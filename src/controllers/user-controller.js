@@ -18,9 +18,9 @@ const registerUser = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const user = await userService.login(req.body);
+    const token = await userService.login(req.body);
     SuccessResponse.message = "Successfully Logged in.";
-    SuccessResponse.data = user;
+    SuccessResponse.data = token;
     return res.status(StatusCodes.OK).json(SuccessResponse);
   } catch (error) {
     ErrorResponse.error = error;
@@ -28,7 +28,34 @@ const login = async (req, res) => {
   }
 };
 
+const signOut = async (req, res) => {
+  try {
+    const user = await userService.getUserByEmail(req.user.email);
+    SuccessResponse.message = "User successfully signed out";
+    SuccessResponse.data = user;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error?.statusCode).json(ErrorResponse);
+  }
+};
+
+const validateUser = async (req, res) => {
+  try {
+    const user = await userService.getUserByEmail(req.user.email);
+    SuccessResponse.message = "Successfully validated user.";
+    SuccessResponse.data = user;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error;
+    ErrorResponse.message = error?.message;
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+  }
+};
+
 export default {
   registerUser,
   login,
+  signOut,
+  validateUser,
 };

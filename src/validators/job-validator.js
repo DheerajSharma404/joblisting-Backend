@@ -20,7 +20,7 @@ const jobPostValidationSchema = z.object({
     .string()
     .min(3, { message: "Location must contain atleast 3 characters." }),
 
-  jobLocationType: z.enum(["In-Office", "Remote", "Hybrid"]),
+  jobLocationType: z.enum(["OnSite", "Remote", "Hybrid"]),
 
   jobDuration: z.enum(["Short-Term", "Long-Term", "Contract"]),
 
@@ -33,6 +33,7 @@ const jobPostValidationSchema = z.object({
   educationRequirement: z
     .string()
     .min(1, { message: "Education is required." }),
+  teamSize: z.string().min(1, { message: "Team Size is Required" }),
   salary: z.string().min(1, { message: "Salary is required." }),
 });
 

@@ -24,7 +24,7 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    
+
     jobTitle: {
       type: String,
       required: true,
@@ -58,6 +58,10 @@ const jobSchema = new mongoose.Schema(
       required: true,
     },
     educationRequirement: {
+      type: String,
+      required: true,
+    },
+    teamSize: {
       type: String,
       required: true,
     },

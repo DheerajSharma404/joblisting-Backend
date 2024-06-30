@@ -7,13 +7,22 @@ import AppError from "../utils/error/app-error.js";
 
 class UserService {
   constructor() {
-    this.UserRepository = new UserRepository();
+    this.userRepository = new UserRepository();
+  }
+
+  async getUserByEmail(email) {
+    try {
+      const user = await this.userRepository.findByEmail(email);
+      return user;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async registerUser(data) {
     try {
       const { email, password } = data;
-      const isExistingUser = await this.UserRepository.getUserByEmail(email);
+      const isExistingUser = await this.userRepository.findByEmail(email);
       if (isExistingUser) {
         throw new AppError("Email is already exists", StatusCodes.CONFLICT);
       }
@@ -26,11 +35,10 @@ class UserService {
         password: hashedPassword,
       };
 
-      const newUser = await this.UserRepository.create(user);
+      const newUser = await this.userRepository.create(user);
       return newUser;
     } catch (error) {
       if (error instanceof AppError) throw error;
-      console.log(error);
       throw new AppError(
         "Something went wrong",
         StatusCodes.INTERNAL_SERVER_ERROR
@@ -41,7 +49,7 @@ class UserService {
   async login(data) {
     try {
       const { email, password } = data;
-      const user = await this.UserRepository.getUserByEmail(email);
+      const user = await this.getUserByEmail(email);
       if (!user) {
         throw new AppError("User does not exist", StatusCodes.UNAUTHORIZED);
       }
@@ -50,11 +58,10 @@ class UserService {
       if (!passwordMatch) {
         throw new AppError("Invalid Credential", StatusCodes.UNAUTHORIZED);
       }
-      const jwt = Auth.createToken({ id: user._id, email: user.email });
-      return jwt;
+      const jwt = Auth.createToken(user);
+      return { token: jwt, ...user };
     } catch (error) {
       if (error instanceof AppError) throw error;
-      console.log(error);
       throw new AppError(
         "Something went wrong",
         StatusCodes.INTERNAL_SERVER_ERROR
@@ -68,20 +75,13 @@ class UserService {
         throw new AppError("Missing JWT token", StatusCodes.BAD_REQUEST);
       }
       const response = Auth.verifyToken(token);
-      const user = await this.UserRepository.get(response.id);
+      const user = await this.userRepository.get(response.id);
       if (!user) {
         throw new AppError("No user found", StatusCodes.BAD_REQUEST);
       }
-      return user._id;
+      return user;
     } catch (error) {
       if (error instanceof AppError) throw error;
-      if (error.name === "JsonWebTokenError") {
-        throw new AppError("Invaid JWT Token", StatusCodes.BAD_REQUEST);
-      }
-      if (error.name === "TokenExpiredError") {
-        throw new AppError("JWT token expired", StatusCodes.BAD_REQUEST);
-      }
-      console.log(error);
       throw new AppError(
         "Something went wrong",
         StatusCodes.INTERNAL_SERVER_ERROR

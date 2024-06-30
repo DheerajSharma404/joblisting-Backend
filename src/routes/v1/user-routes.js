@@ -19,7 +19,6 @@ router.post(
   UserController.registerUser
 );
 
-
 /**
  * POST
  * Request body
@@ -32,6 +31,13 @@ router.post(
   "/sign-in",
   AuthMiddleware.validateAuthRequest,
   UserController.login
+);
+router.post("/sign-out", AuthMiddleware.checkAuth, UserController.signOut);
+
+router.post(
+  "/validate-token",
+  AuthMiddleware.checkAuth,
+  UserController.validateUser
 );
 
 export default router;

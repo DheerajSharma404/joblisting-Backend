@@ -32,7 +32,6 @@ const getJobDetailsById = async (req, res) => {
 const getAllJobs = async (req, res) => {
   try {
     const jobs = await jobService.getAllJobs(req.query);
-    console.log(jobs);
     SuccessResponse.message = "Successfully fetched all the jobs.";
     SuccessResponse.data = jobs;
     return res.status(StatusCodes.OK).json(SuccessResponse);

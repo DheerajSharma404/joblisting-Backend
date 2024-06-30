@@ -6,7 +6,7 @@ import { UserValidations } from "../validators/index.js";
 const userService = new UserService();
 
 const validateUserRegisterRequest = (req, res, next) => {
-  console.log(req.body);
+
   const validationResult =
     UserValidations.userRegisterValidationSchema.safeParse(req.body);
   if (!validationResult.success) {
@@ -38,15 +38,12 @@ const validateAuthRequest = (req, res, next) => {
 
 const checkAuth = async (req, res, next) => {
   try {
-    const response = await userService.isAuthenticated(
+    const user = await userService.isAuthenticated(
       req.headers["x-access-token"]
     );
-    if (response) {
-      req.userId = response;
-      next();
-    }
+    req.user = user;
+    next();
   } catch (error) {
-    
     return res.status(error.statusCode).json(error);
   }
 };
